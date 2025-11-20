@@ -1,0 +1,34 @@
+Primer Experimento de Modelo
+
+--- Evaluación del Modelo (MAE) ---
+Error en 'Infraestructura': 14.29 puntos porcentuales
+Error en 'Gestión Tráfico': 11.61 puntos porcentuales
+Error en 'Viajeros': 4.00 puntos porcentuales
+
+Un MAE (Error Absoluto Medio) de 14.29 puntos en 'Infraestructura' significa que, en promedio, el modelo se equivoca por 14.29 puntos porcentuales. Si el retraso real es del 5%, el modelo podría predecir 19% (o -9%, aunque se limita a 0). Esto no es útil para la planificación.
+
+Nuestro modelo (X) solo usa:
+
+	* La ruta (Route_encoded)
+
+	* El mes del año (month_sin, month_cos)
+
+	* Los valores pasados de las propias causas (infra_lag_1, 	  traffic_lag_3, etc.)
+
+El modelo no sabe nada sobre qué más estaba pasando en la línea. No sabe si hubo cancelaciones, si los trenes ya venían tarde, etc.
+
+La solución es darle al modelo más contexto. Afortunadamente, nuestro CSV está lleno de pistas valiosas que estamos ignorando. Vamos a añadir más columnas a nuestras "features" (X).
+
+Vamos a incluir los valores pasados (lags) de:
+
+Number of cancelled trains
+
+Number of late trains at departure
+
+Average delay of late departing trains (min)
+
+Number of trains late on arrival
+
+Number of late trains > 15min
+
+La hipótesis es: un aumento en el Número de trenes cancelados el mes pasado (lag 1) es una excelente pista para predecir un aumento en los retrasos por Infraestructura este mes.

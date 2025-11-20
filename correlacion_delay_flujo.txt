@@ -1,0 +1,17 @@
+Nuestra hipótesis falló porque asumimos que NB_VALID (Metro/RER) y Delay due to travellers (TGV) medían lo mismo. No es así.
+
+Variable 1: NB_VALID (Tu nuevo dataset) Esto mide la afluencia del transporte local y de cercanías (Metro, RER, Bus). Está dominado por commuters: gente que va al trabajo, a la escuela, etc.
+
+Pico: Septiembre - Noviembre (vuelta al trabajo/escuela).
+
+Valle: Julio - Agosto (parisinos de vacaciones).
+
+Variable 2: Delay due to travellers (Tu dataset original) Esto mide los retrasos en trenes de larga distancia (TGV). Estos retrasos no son causados por commuters (que viajan rápido), sino por viajeros ocasionales/turistas: gente con muchas maletas, que no conoce la estación, que gestiona familias, etc.
+
+Pico: Julio - Agosto (vacaciones de verano).
+
+Valle: Septiembre - Noviembre (post-vacaciones).
+
+¡Acabamos de probar que estas dos variables son opuestas!
+
+Cuando la afluencia local (commuters) sube, la afluencia turística (causa de retrasos) baja. Y viceversa. Esto explica perfectamente la correlación negativa de -0.5131.

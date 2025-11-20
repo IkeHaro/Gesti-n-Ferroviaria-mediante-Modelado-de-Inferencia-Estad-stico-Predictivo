@@ -1,0 +1,26 @@
+Nuestros nuevos resultados son: --- Evaluación del Modelo (MAE) ---Error en 'Infraestructura': 14.43 puntos porcentualesError en 'Gestión Tráfico': 12.53 puntos porcentualesError en 'Viajeros': 4.41 puntos porcentuales
+
+El Modelo 2.0 (el que tenía docenas de features) es un fracaso. El error no solo no bajó, sino que subió ligeramente.
+
+Diagnóstico
+Este es un escenario clásico en machine learning. Lo que hemos hecho se llama introducir "ruido".
+
+Modelo 1.0 (Simple): Tenía un MAE de ~14.
+
+Modelo 2.0 (Complejo): Le dimos al modelo docenas de "pistas" nuevas (lags de 1, 3 y 6 meses para 9 variables).
+
+El Resultado: El modelo se "ahogó" en datos inútiles. Se confundió. Una pista como avg_delay_lag_6 (el retraso promedio de hace 6 meses) es probablemente irrelevante para predecir el retraso de infraestructura de hoy.
+
+El modelo se volvió más complejo, pero no más preciso. No pudo distinguir la "señal" (información útil) del "ruido" (información irrelevante).
+
+Plan de Acción: Modelo 3.0 (Inmediatez vs. Tendencia)
+Necesitamos un enfoque mucho más inteligente. Ni tan simple como el Modelo 1, ni tan ruidoso como el Modelo 2.
+
+Construir un modelo basado en dos conceptos de predicción potentes:
+
+Inmediatez (Lags de 1 mes): ¿Qué pasó el mes pasado? Esta es la pista más fuerte e inmediata. Usaremos el lag_1 de todas las variables clave.
+
+Tendencia (Promedios Móviles): ¿Cuál ha sido la tendencia reciente? Un "pico" aislado de retraso hace 3 meses es ruido, pero si el promedio de los últimos 3 y 6 meses ha ido subiendo, eso es una señal muy fuerte.
+
+Hipótesis:
+Este modelo será mucho más robusto porque "suaviza" los picos aleatorios (ruido) y se enfoca en el comportamiento real a corto plazo (inmediatez) y a medio plazo (tendencia).

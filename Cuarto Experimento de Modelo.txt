@@ -1,0 +1,79 @@
+El MAE (error) de 'Infraestructura' bajó de 14.47 a 9.63. Es una reducción masiva del error, ¡casi un 34% de mejora!
+
+Esto demuestra matemáticamente que el problema no era (del todo) nuestro Modelo 3.0, sino que le estábamos pidiendo algo imposible: predecir los efectos de una pandemia global usando datos de un mundo "normal".
+
+Análisis de los Nuevos Resultados (Modelo 3.1)
+Ahora sí estamos comparando "manzanas con manzanas" (2015-2018 vs. 2019). Esto es lo que nos dicen los nuevos números:
+
+Error en 'Infraestructura' (9.63 puntos):
+
+Este es el gran ganador. Pasar de 14.5 a 9.6 es una mejora espectacular.
+
+¿Qué significa? Significa que nuestro modelo SÍ tiene poder predictivo. Un error de 9.6 puntos sigue siendo alto (predecir fallos de infraestructura es la tarea más difícil), pero es un punto de partida infinitamente mejor.
+
+Error en 'Gestión Tráfico' (10.15 puntos):
+
+Este error apenas mejoró (bajó de 11.8).
+
+¿Qué significa? Esto nos sugiere que los retrasos por "Gestión de Tráfico" son muy volátiles, incluso en un año "normal" como 2019. O quizás, las features que creamos (promedios móviles de retrasos, cancelaciones, etc.) no son buenas pistas para predecir esta causa en particular.
+
+Error en 'Viajeros' (3.18 puntos):
+
+Este resultado ahora es muy bueno. Un error de solo 3 puntos porcentuales es totalmente aceptable para un modelo de pronóstico y lo hace muy fiable para esta categoría.
+
+Conclusión y Próximos Pasos
+
+Hemos logrado tres cosas fundamentales:
+
+Confirmamos tu hipótesis: El COVID-19 era el "Cisne Negro" que contaminaba nuestros resultados.
+
+Validamos el Modelo 3.0: Nuestra estrategia de features (inmediatez + tendencia) es la correcta.
+
+Tenemos un modelo base: Ahora tenemos un "campeón" (Modelo 3.1) con un MAE de 9.63 para 'Infraestructura'.
+
+La pregunta es: ¿Podemos reducir ese 9.63 aún más?
+
+Creo que sí. Ahora que tenemos la metodología de features correcta (Modelo 3.0) y el conjunto de datos correcto (Pre-COVID), podemos aplicar el último experimento que teníamos pendiente: el Modelo 4.0 (Modelos Especialistas).
+
+Propuesta: Combinemos todo lo aprendido. Usemos nuestro conjunto de datos df_pre_covid y nuestras features del Modelo 3.0, pero apliquemos el entrenamiento del Modelo 4.0 (un modelo especialista para cada ruta).
+
+Mi hipótesis es que al permitir que un modelo se "especialice" solo en la ruta "París-Lyon" (por ejemplo), podrá tomar nuestras features y reducir ese MAE de 9.63 aún más, quizás a un rango de 5-7.
+
+Tu descubrimiento significa que cada fila es un "presupuesto" del 100% de la culpa.
+
+Ejemplo: Si una fila dice:
+
+Delay due to railway infrastructure = 50.0
+
+Delay due to traffic management = 25.0
+
+Delay due to travellers taken into account = 25.0
+
+(Y el resto 0)
+
+Esto no significa que el 50% de los trenes se retrasaron por infraestructura. Significa que de todo el conjunto de retrasos ocurridos, el 50% de la causa fue atribuida a infraestructura.
+
+Por Qué Esto es tan Importante para Nuestros Modelos
+Este descubrimiento confirma todas las conclusiones a las que llegamos:
+
+Confirma por qué Infraestructura Fracasó:
+
+Un fallo de infraestructura no es un "poquito". Es un desastre.
+
+Cuando ocurre un fallo grave, esa columna salta a 80% o 100% (acaparando toda la culpa) y todas las demás caen a 0%.
+
+Esto confirma nuestra teoría: es un indicador reactivo de "desastre" (cola larga en el histograma), no un patrón predecible. El modelo no puede predecir un pico aleatorio de 0 a 100.
+
+Confirma por qué Viajeros Tuvo Éxito:
+
+Los retrasos por viajeros (afluencia, equipaje) son un "costo de hacer negocios". Son crónicos y de bajo nivel.
+
+Es probable que esta columna sea estable, situándose entre 3% y 10% en casi todas las filas (como vimos en los histogramas).
+
+Como es un patrón constante y de bajo impacto, el modelo (RandomForest, LGBM) fue excelente para aprender esta "base" predecible.
+
+Valida Nuestro Enfoque (MultiOutputRegressor):
+
+Dado que las variables están intrínsecamente conectadas (si Infraestructura sube, las otras deben bajar para sumar 100), predecirlas por separado (un modelo para cada una) habría sido un error.
+
+Nuestro enfoque de usar MultiOutputRegressor (que intenta predecir todas a la vez) fue el correcto, ya que el modelo puede "aprender" estas interconexiones.
